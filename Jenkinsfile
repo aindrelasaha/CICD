@@ -1,26 +1,29 @@
 pipeline {
-      agent any
-      stages {
-            stage('Init') {
-                  steps {
-                        echo 'Hi, I am Harish'
-                        echo 'We are Starting the Testing'
-                  }
+    agent any
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo 'Checking out source code'
+                checkout scm
             }
-            stage('Build') {
-                  steps {
-                        echo 'Building Sample Jenkins Project'
-                  }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Running build step'
+                sh './hello.sh'
             }
-            stage('Deploy') {
-                  steps {
-                        echo "Deploying in Acceptence Area"
-                  }
-            }
-            stage('Deploy Production') {
-                  steps {
-                        echo "Deploying in Production Area"
-                  }
-            }
-      }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build SUCCESS ✅'
+        }
+        failure {
+            echo 'Build FAILED ❌ - Stop the line'
+        }
+    }
 }
+
